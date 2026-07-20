@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY PORTFOLIO — 个人作品集</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Card Nav styles loaded below -->
+
+  <style>
+    :root {
+      --bg: #cdcfce;
+      --border: #1a1a1a;
+      --nav-h: 68px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      overflow: hidden;
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: #1d1d1f;
+      font-family: 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+      letter-spacing: 0.02em;
+      height: 100vh; width: 100vw;
+    }
+
+    /* ============ 机能网格背景 ============ */
+    .grid-bg {
+      background-image:
+        linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+
+    /* 板块右上角巨大灰色序号（每页固定） */
+    .section-index {
+      position: fixed;
+      top: 4vh; right: 3vw;
+      font-size: 14vw;
+      font-weight: 900;
+      color: rgba(0,0,0,0.035);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      user-select: none;
+      pointer-events: none;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      z-index: 1;
+    }
+
+    /* ============ 品牌角标 ============ */
+    .brand {
+      position: fixed; top: 22px; left: 32px; z-index: 101;
+      color: #1d1d1f; font-weight: 800; font-size: 13px; letter-spacing: 0.3em;
+      pointer-events: none;
+    }
+    .brand-r {
+      position: fixed; top: 22px; right: 32px; z-index: 101;
+      color: rgba(255,255,255,0.45); font-size: 11px; letter-spacing: 0.3em;
+      pointer-events: none; display: none;
+    }
+
+    /* ============ 横向切换 Viewport ============ */
+    .viewport {
+      position: fixed; inset: 0;
+      overflow-x: hidden;
+      overflow-y: hidden;
+    }
+    .slides {
+      display: flex; flex-direction: row;
+      height: 100%;
+      will-change: transform;
+      transition: transform 800ms cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .slide {
+      width: 100vw; height: 100vh;
+      flex-shrink: 0;
+      position: relative;
+      background: var(--bg); color: #1d1d1f;
+      border-right: 1px solid var(--border);
+      overflow: hidden;
+    }
+    /* 内容页允许纵滚 */
+    .slide-content {
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,0,0,0.18) transparent;
+    }
+    .slide-content::-webkit-scrollbar { width: 6px; }
+    .slide-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); }
+    .slide-content::-webkit-scrollbar-track { background: transparent; }
+
+    /* ============ Hero 页（首页 / 联系我） ============ */
+    .slide-hero {
+      display: flex; align-items: stretch; justify-content: center;
+    }
+    .hero-inner { text-align: center; padding: 0 8vw; }
+    .hero-title {
+      font-weight: 900;
+      font-size: clamp(52px, 11vw, 180px);
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+    }
+    .hero-sub {
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      letter-spacing: 0.35em;
+      margin: 24px 0 48px;
+    }
+    .hard-btn {
+      border: 1.5px solid #fff;
+      padding: 14px 34px;
+      font-size: 13px; letter-spacing: 0.2em;
+      color: #fff; background: transparent;
+      cursor: pointer; font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .hard-btn:hover { background: #fff; color: var(--bg); }
+    .hero-inner {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      height: 100%; padding-bottom: 130px;
+    }
+    .hero-btn-group {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      position: relative;
+    }
+    .hard-btn-dark {
+      border: none;
+      padding: 12px 28px;
+      font-size: 12px; letter-spacing: 0.15em;
+      color: #fff; background: rgba(0,0,0,0.45);
+      cursor: pointer; font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.25s;
+      backdrop-filter: blur(8px);
+    }
+    .hard-btn-dark:hover { background: #0091ff; color: #fff; }
+    .contact-list {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 12px 40px;
+      margin-top: 48px;
+      color: #626262;
+      font-size: 13px; letter-spacing: 0.15em;
+    }
+    .contact-list .dot {
+      display: inline-block; width: 6px; height: 6px;
+      background: #626262;
+      margin-right: 10px; vertical-align: middle;
+    }
+    .copyright {
+      margin-top: 64px;
+      color: rgba(0,0,0,0.25);
+      font-size: 10px; letter-spacing: 0.4em;
+    }
+
+    /* ============ 作品页排版 ============ */
+    .work-page {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 12vh 6vw calc(var(--nav-h) + 8vh);
+    }
+    .work-header { margin-bottom: 6vh; }
+    .work-kicker {
+      color: #626262;
+      font-size: 11px; letter-spacing: 0.4em;
+      margin-bottom: 20px;
+    }
+    .work-title {
+      font-weight: 800;
+      font-size: clamp(32px, 4.6vw, 72px);
+      letter-spacing: -0.015em;
+      line-height: 1.06;
+      color: #1d1d1f;
+    }
+    .work-sub {
+      margin-top: 14px;
+      color: #626262;
+      font-size: 12px; letter-spacing: 0.28em;
+    }
+    .work-intro {
+      margin-top: 22px;
+      max-width: 620px;
+      color: #626262;
+      font-size: 13px;
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+      font-weight: 400;
+    }
+    .work-divider {
+      margin-top: 32px;
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.15), rgba(0,0,0,0));
+    }
+
+    /* ============ 素材墙：CSS Columns 瀑布流 ============ */
+    .media-grid {
+      column-count: 3;
+      column-gap: 24px;
+      padding: 4px 80px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    @media (max-width: 1024px) { .media-grid { column-count: 2; } }
+    @media (max-width: 640px)  { .media-grid { column-count: 1; } }
+
+    .media-item {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin: 0 0 24px;
+      overflow: hidden;
+      position: relative;
+      background: #f5f5f5;
+      border: 1px solid rgba(0,0,0,0.08);
+      cursor: zoom-in;
+      transition: border-color 0.3s, transform 0.4s;
+      border-radius: 15px;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    .media-item:hover { border-color: rgba(0,0,0,0.25); }
+    
+    /* Glare Hover 效果 - 跟随鼠标径向反光 */
+    .media-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(
+        200% circle at var(--glare-x, 50%) var(--glare-y, 50%),
+        rgba(255, 255, 255, 0.35) 0%,
+        rgba(255, 255, 255, 0.08) 40%,
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.12s ease;
+      pointer-events: none;
+      border-radius: inherit;
+      z-index: 2;
+    }
+    .media-item:hover::before { opacity: 1; }
+    .media-item img,
+    .media-item video {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .media-item img {
+      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), opacity 0.4s;
+    }
+    .media-item:hover img { transform: scale(1.03); }
+
+    /* Bounce Cards animation initial state */
+    .media-item.bounce-card-init {
+      opacity: 0;
+      transform: scale(0);
+      transition: none;
+      transform-origin: center bottom;
+    }
+    .media-item.bounce-card-animated {
+      opacity: 1;
+    }
+    
+    /* 让 media-grid 支持卡片堆叠效果 */
+    .media-grid {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .media-item {
+      transform-origin: center bottom;
+      z-index: 1;
+    }
+    
+    .media-item:hover {
+      z-index: 10;
+    }
+    .media-video { cursor: default; }
+    .media-video video {
+      background: #e0e0e0;
+    }
+
+    /* 悬浮小角标 */
+    .media-item::after {
+      content: '↗';
+      position: absolute; bottom: 12px; right: 14px;
+      color: #1d1d1f;
+      font-size: 14px;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(0,0,0,0.1);
+      padding: 3px 9px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .media-item:hover::after { opacity: 1; }
+    .media-video::after { content: none; }
+
+    /* ============ Nav Wrapper + 翻页按钮 + Card Nav ============ */
+    .nav-wrapper {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+    }
+    .nav-arrow-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      color: #1d1d1f;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, opacity 0.3s, transform 0.3s;
+      flex-shrink: 0;
+      font-family: inherit;
+      margin-bottom: 0;
+    }
+    .nav-arrow-btn:hover {
+      background: #0091ff;
+      color: #fff;
+    }
+    .nav-arrow-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.7);
+    }
+    .card-nav {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 180px;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 999px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      transition: border-radius 0.3s, box-shadow 0.3s;
+    }
+    .card-nav.open {
+      border-radius: 0 0 16px 16px;
+      border-top: none;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+    }
+    .card-nav-toggle {
+      background: none;
+      border: none;
+      padding: 10px 28px;
+      font-size: 12px;
+      color: #1d1d1f;
+      cursor: pointer;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      width: 100%;
+      justify-content: center;
+    }
+    .card-nav-toggle:hover {
+      background: rgba(0,0,0,0.04);
+    }
+    .card-nav.open .card-nav-toggle {
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-nav-toggle .toggle-arrow {
+      font-size: 8px;
+      transition: transform 0.3s;
+      display: inline-block;
+    }
+    .card-nav.open .card-nav-toggle .toggle-arrow {
+      transform: rotate(180deg);
+    }
+    .card-nav-panel {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      overflow: hidden;
+      height: 0;
+      padding: 0;
+      width: max-content;
+      max-width: 90vw;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 1;
+    }
+    .card-nav-list {
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      gap: 4px 12px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .card-nav-item {
+      padding: 8px 12px;
+      font-size: 11px;
+      color: #626262;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s;
+      white-space: nowrap;
+      text-align: center;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    .card-nav-item:hover {
+      background: #1d1d1f;
+      color: #fff;
+    }
+    .card-nav-item.active {
+      background: #1d1d1f;
+      color: #fff;
+      font-weight: 600;
+    }
+    @media (max-width: 768px) {
+      .card-nav-list {
+        grid-template-columns: repeat(2, auto);
+        min-height: calc(3 * (11px * 1.4 + 16px) + 2 * 4px);
+      }
+      .card-nav-panel {
+        max-width: 94vw;
+      }
+      .nav-wrapper {
+        max-width: 96vw;
+      }
+      .nav-arrow-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+    }
+
+    /* ============ Modal & Lightbox ============ */
+    .modal-mask {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none; align-items: center; justify-content: center;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      cursor: zoom-out;
+    }
+    .modal-mask.active { display: flex; opacity: 1; }
+    .modal-body {
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(30,30,30,0.95);
+      padding: 20px;
+      transform: scale(0.96);
+      transition: transform 0.3s ease;
+      cursor: default;
+      border-radius: 8px;
+    }
+    .modal-mask.active .modal-body { transform: scale(1); }
+    .modal-close {
+      position: absolute; top: -14px; right: -14px;
+      width: 32px; height: 32px;
+      background: #fff; color: #000; border: none;
+      font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 5;
+    }
+    /* Lightbox 图片严格 75vw × 75vh */
+    .lightbox-img {
+      max-width: 75vw;
+      max-height: 75vh;
+      object-fit: contain;
+      display: block;
+    }
+    .resume-img {
+      max-width: 80vw; max-height: 80vh;
+      object-fit: contain; display: block;
+    }
+
+    /* ============ Target Cursor ============ */
+    .target-cursor-wrapper {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0; height: 0;
+      pointer-events: none;
+      z-index: 99999;
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%);
+    }
+    .target-cursor-dot {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 4px; height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+    .target-cursor-corner {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 12px; height: 12px;
+      border: 3px solid #fff;
+      will-change: transform;
+    }
+    .corner-tl { transform: translate(-150%, -150%); border-right: none; border-bottom: none; }
+    .corner-tr { transform: translate(50%, -150%); border-left: none; border-bottom: none; }
+    .corner-br { transform: translate(50%, 50%); border-left: none; border-top: none; }
+    .corner-bl { transform: translate(-150%, 50%); border-right: none; border-top: none; }
+    
+    @media (hover: none) and (pointer: coarse) {
+      .target-cursor-wrapper { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand">PORTFOLIO / 2026</div>
+  <div class="brand-r" id="section-indicator">01 / 14</div>
+
+  <!-- ================== 横向 Viewport ================== -->
+  <div class="viewport">
+    <div id="slides" class="slides">
+
+      <!-- ============== 01 首页 ============== -->
+      <section class="slide slide-hero slide-hero-light" data-title="首页" style="border-right-color:#cccccc;background-color:#cdcfce;background-image:url('assets/design/homepage.webp');background-position:center center;background-size:contain;background-repeat:no-repeat;">
+        <div class="hero-inner">
+          <div class="hero-btn-group">
+            <button id="open-resume" class="hard-btn hard-btn-dark">个人简历</button>
+            <button id="open-tools" class="hard-btn hard-btn-dark">精通工具</button>
+            <button id="open-pdf" class="hard-btn hard-btn-dark">作品集PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== 02 交行品牌-碳星荣耀 ============== -->
+      <section class="slide slide-content grid-bg" data-title="交行品牌-碳星荣耀">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 02 —</div>
+            <h2 class="work-title">交行品牌-碳星荣耀</h2>
+            <div class="work-sub">BANK OF COMM · CARBON STAR</div>
+            <p class="work-intro">为交通银行打造的低碳品牌视觉系统，以科技蓝与生态绿为基调，通过数字化设计语言传递可持续发展理念，涵盖品牌标识、物料延展及应用场景</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/1.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/2.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/3.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/4.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/5.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/6.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/7.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/8.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/9.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/10.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/11.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/12.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/13.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C%E5%93%81%E7%89%8C-%E7%A2%B3%E6%98%9F%E8%8D%A3%E8%80%80/14.webp" alt="交行品牌-碳星荣耀" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 03 交行-数字生活节活动 ============== -->
+      <section class="slide slide-content grid-bg" data-title="交行-数字生活节活动">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 03 —</div>
+            <h2 class="work-title">交行-数字生活节活动</h2>
+            <div class="work-sub">DIGITAL LIFE FESTIVAL</div>
+            <p class="work-intro">交通银行年度数字生活节营销活动视觉设计</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C-%E6%95%B0%E5%AD%97%E7%94%9F%E6%B4%BB%E8%8A%82%E6%B4%BB%E5%8A%A8/1.webp" alt="交行-数字生活节活动" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C-%E6%95%B0%E5%AD%97%E7%94%9F%E6%B4%BB%E8%8A%82%E6%B4%BB%E5%8A%A8/2.webp" alt="交行-数字生活节活动" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 04 交行-盲盒活动 ============== -->
+      <section class="slide slide-content grid-bg" data-title="交行-盲盒活动">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 04 —</div>
+            <h2 class="work-title">交行-盲盒活动</h2>
+            <div class="work-sub">MYSTERY BOX CAMPAIGN</div>
+            <p class="work-intro">交通银行盲盒主题营销活动设计，以潮玩元素结合金融场景，打造年轻化品牌触点，提升用户参与度与品牌好感度。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E4%BA%A4%E8%A1%8C-%E7%9B%B2%E7%9B%92%E6%B4%BB%E5%8A%A8/1.webp" alt="交行-盲盒活动" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 05 动态和视频 ============== -->
+      <section class="slide slide-content grid-bg" data-title="动态和视频">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 05 —</div>
+            <h2 class="work-title">动态和视频</h2>
+            <div class="work-sub">MOTION GRAPHICS & VIDEO</div>
+            <p class="work-intro">动态图形与视频作品合集，涵盖Lottie动画、ai视频、模型视频、实景合成等内容，注重节奏感与视觉冲击力的平衡。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item media-video" data-orient="wide">
+        <video src="assets/works/%E5%8A%A8%E6%80%81%E5%92%8C%E8%A7%86%E9%A2%91/1.mp4" autoplay muted loop playsinline preload="metadata" controls></video>
+      </figure>
+      <figure class="media-item media-video" data-orient="wide">
+        <video src="assets/works/%E5%8A%A8%E6%80%81%E5%92%8C%E8%A7%86%E9%A2%91/2.mp4" autoplay muted loop playsinline preload="metadata" controls></video>
+      </figure>
+      <figure class="media-item media-video" data-orient="wide">
+        <video src="assets/works/%E5%8A%A8%E6%80%81%E5%92%8C%E8%A7%86%E9%A2%91/3.mp4" autoplay muted loop playsinline preload="metadata" controls></video>
+      </figure>
+      <figure class="media-item media-video" data-orient="wide">
+        <video src="assets/works/%E5%8A%A8%E6%80%81%E5%92%8C%E8%A7%86%E9%A2%91/4.mp4" autoplay muted loop playsinline preload="metadata" controls></video>
+      </figure>
+      <figure class="media-item media-video" data-orient="wide">
+        <video src="assets/works/%E5%8A%A8%E6%80%81%E5%92%8C%E8%A7%86%E9%A2%91/5.mp4" autoplay muted loop playsinline preload="metadata" controls></video>
+      </figure>
+      <figure class="media-item media-video" data-orient="wide">
+        <video src="assets/works/%E5%8A%A8%E6%80%81%E5%92%8C%E8%A7%86%E9%A2%91/6.mp4" autoplay muted loop playsinline preload="metadata" controls></video>
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 06 角色-封面练习 ============== -->
+      <section class="slide slide-content grid-bg" data-title="角色-封面练习">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 06 —</div>
+            <h2 class="work-title">角色-封面练习</h2>
+            <div class="work-sub">CHARACTER · COVER STUDY</div>
+            <p class="work-intro">角色设计封面练习，探索不同风格的人物造型与构图方式，锻炼角色表现力与画面叙事能力</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/1.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/2.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/3.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/4.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/5.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/6.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/7.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/8.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E8%A7%92%E8%89%B2-%E5%B0%81%E9%9D%A2%E7%BB%83%E4%B9%A0/9.webp" alt="角色-封面练习" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 08 手绘练习 ============== -->
+      <section class="slide slide-content grid-bg" data-title="手绘练习">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 08 —</div>
+            <h2 class="work-title">手绘练习</h2>
+            <div class="work-sub">HAND-DRAWN STUDIES</div>
+            <p class="work-intro">手绘练习作品集线稿、色彩等基础训练，保持手感与观察力的日常积累。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E6%89%8B%E7%BB%98%E7%BB%83%E4%B9%A0/1.webp" alt="手绘练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E6%89%8B%E7%BB%98%E7%BB%83%E4%B9%A0/2.webp" alt="手绘练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E6%89%8B%E7%BB%98%E7%BB%83%E4%B9%A0/3.webp" alt="手绘练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E6%89%8B%E7%BB%98%E7%BB%83%E4%B9%A0/4.webp" alt="手绘练习" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 09 建模练习 ============== -->
+      <section class="slide slide-content grid-bg" data-title="建模练习">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 09 —</div>
+            <h2 class="work-title">建模练习</h2>
+            <div class="work-sub">3D MODELING STUDIES</div>
+            <p class="work-intro">3D 建模练习，涵盖角色、场景、道具等类型，探索三维空间中的造型与材质表现。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/1.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/2.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/3.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/4.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/5.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/6.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/7.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/8.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/9.webp" alt="建模练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%BB%BA%E6%A8%A1%E7%BB%83%E4%B9%A0/10.webp" alt="建模练习" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 10 品牌练习 ============== -->
+      <section class="slide slide-content grid-bg" data-title="品牌练习">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 10 —</div>
+            <h2 class="work-title">品牌练习</h2>
+            <div class="work-sub">BRAND SYSTEM STUDIES</div>
+            <p class="work-intro">品牌设计综合练习，从 Logo 到 VI 系统的完整设计流程，锻炼品牌思维的完整性与系统性。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/1.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/2.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/3.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/4.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/5.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/6.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/7.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/8.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/9.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/10.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/11.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/12.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/13.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/14.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/15.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/16.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/17.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="square" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/18.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/%E5%93%81%E7%89%8C%E7%BB%83%E4%B9%A0/19.webp" alt="品牌练习" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 11 线下广告 ============== -->
+      <section class="slide slide-content grid-bg" data-title="线下广告">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 11 —</div>
+            <h2 class="work-title">线下广告</h2>
+            <div class="work-sub">OUT-OF-HOME ADVERTISING</div>
+            <p class="work-intro">线下广告作品，地铁灯箱广告，注重环境适配与信息传达效率。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E7%BA%BF%E4%B8%8B%E5%B9%BF%E5%91%8A/1.webp" alt="线下广告" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E7%BA%BF%E4%B8%8B%E5%B9%BF%E5%91%8A/2.webp" alt="线下广告" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E7%BA%BF%E4%B8%8B%E5%B9%BF%E5%91%8A/3.webp" alt="线下广告" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E7%BA%BF%E4%B8%8B%E5%B9%BF%E5%91%8A/4.webp" alt="线下广告" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/%E7%BA%BF%E4%B8%8B%E5%B9%BF%E5%91%8A/5.webp" alt="线下广告" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 12 AI角色设计 ============== -->
+      <section class="slide slide-content grid-bg" data-title="AI角色设计">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 12 —</div>
+            <h2 class="work-title">AI角色设计</h2>
+            <div class="work-sub">AI CHARACTER DESIGN</div>
+            <p class="work-intro">AI 辅助角色设计探索，利用生成式 AI 工具进行角色概念设计，探索人机协作的创作模式。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/1.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/2.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/3.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/4.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/5.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/6.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/7.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/8.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/9.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/10.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/11.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+      <figure class="media-item" data-orient="tall" data-lightbox>
+        <img src="assets/works/AI%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/12.webp" alt="AI角色设计" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 13 AI材质迁移 ============== -->
+      <section class="slide slide-content grid-bg" data-title="AI材质迁移">
+        <article class="work-page">
+          <header class="work-header">
+            <div class="work-kicker">— WORK 13 —</div>
+            <h2 class="work-title">AI材质迁移</h2>
+            <div class="work-sub">AI MATERIAL TRANSFER</div>
+            <p class="work-intro">AI 材质迁移技术应用，通过 AI 实现风格化材质转换，拓展视觉表现的边界与可能性。</p>
+            <div class="work-divider"></div>
+          </header>
+          <div class="media-grid">
+      <figure class="media-item" data-orient="wide" data-lightbox>
+        <img src="assets/works/AI%E6%9D%90%E8%B4%A8%E8%BF%81%E7%A7%BB/1.webp" alt="AI材质迁移" loading="lazy" />
+      </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============== 14 联系我 ============== -->
+      <section class="slide slide-hero slide-hero-light" data-title="联系我" style="border-right-color:#cccccc;background-color:#bfbfbf;background-image:url('assets/design/footer.webp');background-position:center center;background-size:contain;background-repeat:no-repeat;">
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ================== Nav Wrapper + Card Nav ================== -->
+  <div class="nav-wrapper" id="nav-wrapper">
+    <button class="nav-arrow-btn hidden" id="nav-prev" aria-label="上一页">←</button>
+    <nav class="card-nav" id="card-nav">
+      <div class="card-nav-panel" id="card-nav-panel">
+        <ul id="card-nav-list" class="card-nav-list"></ul>
+      </div>
+      <button class="card-nav-toggle" id="card-nav-toggle">
+        <span class="toggle-label">列表</span>
+        <span class="toggle-arrow">▲</span>
+      </button>
+    </nav>
+    <button class="nav-arrow-btn" id="nav-next" aria-label="下一页">→</button>
+  </div>
+
+  <!-- ================== 简历弹窗 ================== -->
+  <div id="resume-modal" class="modal-mask">
+    <div class="modal-body">
+      <button id="close-resume" class="modal-close">×</button>
+      <img class="resume-img" src="assets/design/resume.webp" alt="个人简历" />
+    </div>
+  </div>
+
+  <!-- ================== 精通工具弹窗 ================== -->
+  <div id="expertise-modal" class="modal-mask">
+    <div class="modal-body">
+      <button id="close-expertise" class="modal-close">×</button>
+      <img class="resume-img" src="assets/design/expertise.webp" alt="精通工具" />
+    </div>
+  </div>
+
+  <!-- ================== 图片 Lightbox ================== -->
+  <div id="lightbox" class="modal-mask">
+    <img id="lightbox-img" class="lightbox-img" src="" alt="放大预览" />
+  </div>
+
+  <!-- Target Cursor -->
+  <div class="target-cursor-wrapper" id="target-cursor">
+    <div class="target-cursor-dot" id="cursor-dot"></div>
+    <div class="target-cursor-corner corner-tl"></div>
+    <div class="target-cursor-corner corner-tr"></div>
+    <div class="target-cursor-corner corner-br"></div>
+    <div class="target-cursor-corner corner-bl"></div>
+  </div>
+
+  <script>
+    const NAV_ITEMS = ["首页", "交行品牌-碳星荣耀", "交行-数字生活节活动", "交行-盲盒活动", "动态和视频", "角色-封面练习", "手绘练习", "建模练习", "品牌练习", "线下广告", "AI角色设计", "AI材质迁移", "联系我"];
+
+    const slidesEl = document.getElementById('slides');
+    const cardNav = document.getElementById('card-nav');
+    const cardNavPanel = document.getElementById('card-nav-panel');
+    const cardNavToggle = document.getElementById('card-nav-toggle');
+    const cardNavList = document.getElementById('card-nav-list');
+    const toggleLabel = cardNavToggle.querySelector('.toggle-label');
+    const navPrev = document.getElementById('nav-prev');
+    const navNext = document.getElementById('nav-next');
+    const sections = Array.from(document.querySelectorAll('#slides > section'));
+    const TOTAL = NAV_ITEMS.length;
+    let currentIdx = 0;
+    let isNavOpen = false;
+    let navTl = null;
+
+    /* 构建 Card Nav 列表 */
+    NAV_ITEMS.forEach((label, idx) => {
+      const li = document.createElement('li');
+      li.className = 'card-nav-item';
+      li.dataset.index = idx;
+      li.textContent = label;
+      li.addEventListener('click', () => {
+        goTo(idx);
+        closeNav();
+      });
+      cardNavList.appendChild(li);
+    });
+    const navItems = Array.from(document.querySelectorAll('.card-nav-item'));
+
+    /* 横向切换 */
+    function goTo(idx) {
+      idx = Math.max(0, Math.min(TOTAL - 1, idx));
+      if (idx === currentIdx) return;
+      currentIdx = idx;
+      slidesEl.style.transform = `translateX(-${idx * 100}vw)`;
+      const target = sections[idx];
+      if (target && target.classList.contains('slide-content')) {
+        target.scrollTop = 0;
+      }
+      document.querySelectorAll('video').forEach(v => {
+        if (!target.contains(v)) v.pause();
+        else if (v.autoplay) v.play().catch(() => {});
+      });
+      updateNav();
+    }
+
+    function updateNav() {
+      navItems.forEach((item, i) => item.classList.toggle('active', i === currentIdx));
+      toggleLabel.textContent = NAV_ITEMS[currentIdx];
+      updateNavArrows();
+    }
+
+    function updateNavArrows() {
+      navPrev.classList.toggle('hidden', currentIdx === 0);
+      navNext.classList.toggle('hidden', currentIdx === TOTAL - 1);
+    }
+
+    /* Card Nav 展开/收起动画 */
+    function openNav() {
+      if (isNavOpen) return;
+      isNavOpen = true;
+      cardNav.classList.add('open');
+      if (navTl) navTl.kill();
+      navTl = gsap.timeline();
+      navTl.fromTo(cardNavPanel,
+        { height: 0, opacity: 0 },
+        { height: 'auto', opacity: 1, duration: 0.28, ease: 'power2.out',
+          onStart: () => { cardNavPanel.style.overflow = 'hidden'; cardNavPanel.style.padding = '14px 12px 4px'; }
+        }
+      );
+      navTl.fromTo(navItems,
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.22, ease: 'power2.out', stagger: 0.018 },
+        '-=0.12'
+      );
+    }
+
+    function closeNav() {
+      if (!isNavOpen) return;
+      isNavOpen = false;
+      if (navTl) navTl.kill();
+      navTl = gsap.timeline({
+        onComplete: () => {
+          cardNav.classList.remove('open');
+          gsap.set(cardNavPanel, { clearProps: 'all' });
+          gsap.set(navItems, { clearProps: 'all' });
+          cardNavPanel.style.padding = '0';
+          cardNavPanel.style.width = '';
+        }
+      });
+      navTl.to(navItems, {
+        opacity: 0, y: 6, duration: 0.12, ease: 'power2.in', stagger: 0.008
+      });
+      navTl.to(cardNavPanel, {
+        height: 0, opacity: 0, duration: 0.2, ease: 'power2.in'
+      }, '-=0.06');
+    }
+
+    cardNavToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      isNavOpen ? closeNav() : openNav();
+    });
+
+    /* 翻页按钮 */
+    navPrev.addEventListener('click', () => { if (currentIdx > 0) { closeNav(); goTo(currentIdx - 1); } });
+    navNext.addEventListener('click', () => { if (currentIdx < TOTAL - 1) { closeNav(); goTo(currentIdx + 1); } });
+
+    /* 点击外部关闭导航 */
+    document.addEventListener('click', (e) => {
+      if (isNavOpen && !cardNav.contains(e.target)) {
+        closeNav();
+      }
+    });
+
+    /* 键盘 ← → 切换 / Esc 关弹窗 */
+    document.addEventListener('keydown', (e) => {
+      const openModal = document.querySelector('.modal-mask.active');
+      if (openModal) {
+        if (e.key === 'Escape') openModal.classList.remove('active');
+        return;
+      }
+      if (e.key === 'ArrowRight') goTo(currentIdx + 1);
+      else if (e.key === 'ArrowLeft') goTo(currentIdx - 1);
+    });
+
+    /* 简历弹窗 */
+    const resumeModal = document.getElementById('resume-modal');
+    document.getElementById('open-resume').addEventListener('click', () => resumeModal.classList.add('active'));
+    document.getElementById('close-resume').addEventListener('click', (e) => {
+      e.stopPropagation();
+      resumeModal.classList.remove('active');
+    });
+    resumeModal.addEventListener('click', () => resumeModal.classList.remove('active'));
+
+    /* 精通工具弹窗 */
+    const expertiseModal = document.getElementById('expertise-modal');
+    document.getElementById('open-tools').addEventListener('click', () => expertiseModal.classList.add('active'));
+    document.getElementById('close-expertise').addEventListener('click', (e) => {
+      e.stopPropagation();
+      expertiseModal.classList.remove('active');
+    });
+    expertiseModal.addEventListener('click', () => expertiseModal.classList.remove('active'));
+
+    /* 作品集PDF - 新标签页打开 */
+    document.getElementById('open-pdf').addEventListener('click', () => {
+      window.open('assets/portfolio.pdf', '_blank');
+    });
+
+    /* ============ Bounce Cards 入场动画 ============ */
+    const animatedSections = new Set();
+
+    // 给所有 media-item 添加初始 class 和 transform
+    function initBounceCards() {
+      document.querySelectorAll('.media-grid').forEach((grid, gridIdx) => {
+        const items = grid.querySelectorAll('.media-item');
+        const total = items.length;
+        
+        items.forEach((item, i) => {
+          // 计算每张卡片的位置：扇形展开（紧凑版）
+          const centerIndex = (total - 1) / 2;
+          const offset = i - centerIndex;
+          const rotation = offset * 1.5; // 每张卡片旋转1.5度
+          const translateX = offset * 12; // 水平偏移12px（紧凑）
+          
+          item.style.setProperty('--bounce-rotation', `${rotation}deg`);
+          item.style.setProperty('--bounce-translate-x', `${translateX}px`);
+          item.classList.add('bounce-card-init');
+        });
+      });
+    }
+
+    // 预加载图片
+    function preloadImages(section) {
+      const imgs = section.querySelectorAll('img');
+      return Promise.all(
+        Array.from(imgs).map(img => {
+          if (img.complete) return Promise.resolve();
+          return new Promise(resolve => {
+            img.addEventListener('load', resolve);
+            img.addEventListener('error', resolve);
+          });
+        })
+      );
+    }
+
+    // 触发指定 section 的 Bounce Cards 动画
+    function animateBounceCards(section, idx) {
+      if (animatedSections.has(idx)) return;
+      animatedSections.add(idx);
+
+      const grids = section.querySelectorAll('.media-grid');
+      
+      grids.forEach(grid => {
+        const items = grid.querySelectorAll('.media-item');
+        if (!items.length) return;
+
+        // 动画期间临时 overflow:visible 让卡片扇形展开
+        grid.style.overflow = 'visible';
+
+        // 先预加载图片
+        preloadImages(section).then(() => {
+          const totalItems = items.length;
+          items.forEach((item, i) => {
+            const rotation = parseFloat(item.style.getPropertyValue('--bounce-rotation')) || 0;
+            const translateX = parseFloat(item.style.getPropertyValue('--bounce-translate-x')) || 0;
+            const isLast = i === totalItems - 1;
+            
+            // 弹性入场动画
+            gsap.fromTo(item,
+              {
+                scale: 0,
+                rotation: rotation,
+                x: translateX,
+                opacity: 0
+              },
+              {
+                scale: 1,
+                rotation: rotation,
+                x: translateX,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'elastic.out(1, 0.8)',
+                delay: 0.3 + i * 0.06,
+                onComplete: () => {
+                  item.classList.add('bounce-card-animated');
+                  // 所有卡片动画完成后，恢复 overflow:hidden 防止超出
+                  if (isLast) {
+                    setTimeout(() => { grid.style.overflow = 'hidden'; }, 100);
+                  }
+                }
+              }
+            );
+          });
+        });
+      });
+    }
+
+    // 重写 goTo 函数以触发动画
+    const originalGoTo = goTo;
+    goTo = function(idx) {
+      originalGoTo(idx);
+      // 延迟触发动画，确保 slide 已切换
+      setTimeout(() => {
+        const section = sections[idx];
+        if (section && section.querySelector('.media-item')) {
+          animateBounceCards(section, idx);
+        }
+      }, 100);
+    };
+
+    // 初始化 Bounce Cards
+    initBounceCards();
+
+    /* ============ Bounce Cards Hover 效果 ============ */
+    document.querySelectorAll('.media-grid').forEach(grid => {
+      const items = Array.from(grid.querySelectorAll('.media-item'));
+      
+      items.forEach((item, hoveredIdx) => {
+        item.addEventListener('mouseenter', () => {
+          if (!item.classList.contains('bounce-card-animated')) return;
+          grid.style.overflow = 'visible';
+          
+          items.forEach((sibling, i) => {
+            const baseRotation = parseFloat(sibling.style.getPropertyValue('--bounce-rotation')) || 0;
+            const baseTranslateX = parseFloat(sibling.style.getPropertyValue('--bounce-translate-x')) || 0;
+            
+            if (i === hoveredIdx) {
+              // 悬停的卡片：取消旋转
+              gsap.to(sibling, {
+                rotation: 0,
+                scale: 1.05,
+                duration: 0.4,
+                ease: 'back.out(1.4)',
+                overwrite: 'auto'
+              });
+            } else {
+              // 其他卡片：推开
+              const offsetX = i < hoveredIdx ? -35 : 35;
+              const newTranslateX = baseTranslateX + offsetX;
+              const distance = Math.abs(hoveredIdx - i);
+              const delay = distance * 0.05;
+              
+              gsap.to(sibling, {
+                x: newTranslateX,
+                duration: 0.4,
+                ease: 'back.out(1.4)',
+                delay,
+                overwrite: 'auto'
+              });
+            }
+          });
+        });
+        
+        item.addEventListener('mouseleave', () => {
+          grid.style.overflow = 'visible';
+          items.forEach((sibling) => {
+            const baseRotation = parseFloat(sibling.style.getPropertyValue('--bounce-rotation')) || 0;
+            const baseTranslateX = parseFloat(sibling.style.getPropertyValue('--bounce-translate-x')) || 0;
+            
+            gsap.to(sibling, {
+              rotation: baseRotation,
+              x: baseTranslateX,
+              scale: 1,
+              zIndex: 1,
+              duration: 0.4,
+              ease: 'back.out(1.4)',
+              overwrite: 'auto'
+            });
+          });
+        });
+      });
+    });
+    resumeModal.querySelector('.modal-body').addEventListener('click', (e) => e.stopPropagation());
+    expertiseModal.querySelector('.modal-body').addEventListener('click', (e) => e.stopPropagation());
+
+    /* Lightbox：点击 media-item[data-lightbox] 放大 */
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    document.addEventListener('click', (e) => {
+      const frame = e.target.closest('[data-lightbox]');
+      if (frame) {
+        const img = frame.querySelector('img');
+        if (img) {
+          lightboxImg.src = img.currentSrc || img.src;
+          lightboxImg.alt = img.alt || '';
+          lightbox.classList.add('active');
+        }
+      }
+    });
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('active');
+    });
+
+
+    /* ============ Glare Hover 鼠标追踪 ============ */
+    document.querySelectorAll('.media-item').forEach(item => {
+      item.addEventListener('mousemove', (e) => {
+        const rect = item.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        item.style.setProperty('--glare-x', x + '%');
+        item.style.setProperty('--glare-y', y + '%');
+      });
+    });
+
+    /* ============ Target Cursor (reactbits reference) ============ */
+    (function() {
+      const cursor = document.getElementById('target-cursor');
+      if (!cursor) return;
+
+      const isMobile = (function() {
+        const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const isSmallScreen = window.innerWidth <= 768;
+        const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+        const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua.toLowerCase());
+        return (hasTouchScreen && isSmallScreen) || isMobileUA;
+      })();
+      if (isMobile) { cursor.style.display = 'none'; return; }
+
+      const dot = document.getElementById('cursor-dot');
+      const corners = Array.from(cursor.querySelectorAll('.target-cursor-corner'));
+      const borderWidth = 3;
+      const cornerSize = 12;
+      const spinDuration = 2;
+      const hoverDuration = 0.2;
+      const parallaxOn = true;
+      const targetSelector = '.media-item, .hard-btn, .card-nav-item, .card-nav-toggle, .nav-arrow-btn';
+
+      function getContainingBlock(element) {
+        let node = element?.parentElement;
+        while (node && node !== document.documentElement) {
+          const style = getComputedStyle(node);
+          if (
+            style.transform !== 'none' ||
+            style.perspective !== 'none' ||
+            style.filter !== 'none' ||
+            style.willChange.includes('transform') ||
+            style.willChange.includes('perspective') ||
+            style.willChange.includes('filter') ||
+            /paint|layout|strict|content/.test(style.contain)
+          ) {
+            return node;
+          }
+          node = node.parentElement;
+        }
+        return null;
+      }
+
+      function getContainingBlockOffset(block) {
+        if (!block) return { x: 0, y: 0 };
+        const rect = block.getBoundingClientRect();
+        return { x: rect.left + block.clientLeft, y: rect.top + block.clientTop };
+      }
+
+      let containingBlock = getContainingBlock(cursor);
+      let activeTarget = null;
+      let targetCornerPositions = null;
+      let activeStrength = 0;
+      let currentLeaveHandler = null;
+      let resumeTimeout = null;
+
+      document.body.style.cursor = 'none';
+      document.querySelectorAll('a, button, .media-item, .card-nav-item, .card-nav-toggle, .nav-arrow-btn, .modal-close, #open-resume, #open-tools, #open-pdf').forEach(el => {
+        el.style.cursor = 'none';
+      });
+
+      const initialOffset = getContainingBlockOffset(containingBlock);
+      gsap.set(cursor, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2 - initialOffset.x, y: window.innerHeight / 2 - initialOffset.y });
+
+      let spinTl = gsap.timeline({ repeat: -1 })
+        .to(cursor, { rotation: '+=360', duration: spinDuration, ease: 'none' });
+
+      function moveCursor(x, y) {
+        const { x: offsetX, y: offsetY } = getContainingBlockOffset(containingBlock);
+        gsap.to(cursor, { x: x - offsetX, y: y - offsetY, duration: 0.1, ease: 'power3.out' });
+      }
+
+      function tickerFn() {
+        if (!targetCornerPositions || activeStrength === 0) return;
+        const cursorX = gsap.getProperty(cursor, 'x');
+        const cursorY = gsap.getProperty(cursor, 'y');
+        corners.forEach((corner, i) => {
+          const currentX = gsap.getProperty(corner, 'x');
+          const currentY = gsap.getProperty(corner, 'y');
+          const targetX = targetCornerPositions[i].x - cursorX;
+          const targetY = targetCornerPositions[i].y - cursorY;
+          const finalX = currentX + (targetX - currentX) * activeStrength;
+          const finalY = currentY + (targetY - currentY) * activeStrength;
+          const dur = activeStrength >= 0.99 ? (parallaxOn ? 0.2 : 0) : 0.05;
+          gsap.to(corner, {
+            x: finalX, y: finalY,
+            duration: dur,
+            ease: dur === 0 ? 'none' : 'power1.out',
+            overwrite: 'auto'
+          });
+        });
+      }
+
+      window.addEventListener('mousemove', (e) => moveCursor(e.clientX, e.clientY));
+
+      window.addEventListener('scroll', () => {
+        if (!activeTarget || !cursor) return;
+        const { x: offsetX, y: offsetY } = getContainingBlockOffset(containingBlock);
+        const mouseX = gsap.getProperty(cursor, 'x') + offsetX;
+        const mouseY = gsap.getProperty(cursor, 'y') + offsetY;
+        const el = document.elementFromPoint(mouseX, mouseY);
+        if (!el || (!el.matches(targetSelector) && !el.closest(targetSelector))) {
+          if (currentLeaveHandler) currentLeaveHandler();
+        }
+      }, { passive: true });
+
+      window.addEventListener('mousedown', () => {
+        gsap.to(dot, { scale: 0.7, duration: 0.3 });
+        gsap.to(cursor, { scale: 0.9, duration: 0.2 });
+      });
+      window.addEventListener('mouseup', () => {
+        gsap.to(dot, { scale: 1, duration: 0.3 });
+        gsap.to(cursor, { scale: 1, duration: 0.2 });
+      });
+
+      window.addEventListener('mouseover', (e) => {
+        const directTarget = e.target;
+        const allTargets = [];
+        let current = directTarget;
+        while (current && current !== document.body) {
+          if (current.matches && current.matches(targetSelector)) {
+            allTargets.push(current);
+          }
+          current = current.parentElement;
+        }
+        const target = allTargets[0] || null;
+        if (!target || target === activeTarget) return;
+
+        if (activeTarget && currentLeaveHandler) {
+          currentLeaveHandler();
+        }
+        activeTarget = target;
+
+        corners.forEach(corner => gsap.killTweensOf(corner, 'x,y'));
+        gsap.killTweensOf(cursor, 'rotation');
+        spinTl.pause();
+        gsap.set(cursor, { rotation: 0 });
+
+        const rect = target.getBoundingClientRect();
+        const { x: offsetX, y: offsetY } = getContainingBlockOffset(containingBlock);
+        const cursorX = gsap.getProperty(cursor, 'x');
+        const cursorY = gsap.getProperty(cursor, 'y');
+
+        targetCornerPositions = [
+          { x: rect.left - borderWidth - offsetX, y: rect.top - borderWidth - offsetY },
+          { x: rect.right + borderWidth - cornerSize - offsetX, y: rect.top - borderWidth - offsetY },
+          { x: rect.right + borderWidth - cornerSize - offsetX, y: rect.bottom + borderWidth - cornerSize - offsetY },
+          { x: rect.left - borderWidth - offsetX, y: rect.bottom + borderWidth - cornerSize - offsetY }
+        ];
+
+        gsap.ticker.add(tickerFn);
+        gsap.to({ val: 0 }, {
+          val: 1,
+          duration: hoverDuration,
+          ease: 'power2.out',
+          onUpdate: function() { activeStrength = this.targets()[0].val; }
+        });
+
+        corners.forEach((corner, i) => {
+          gsap.to(corner, {
+            x: targetCornerPositions[i].x - cursorX,
+            y: targetCornerPositions[i].y - cursorY,
+            duration: 0.2,
+            ease: 'power2.out'
+          });
+        });
+
+        currentLeaveHandler = () => {
+          gsap.ticker.remove(tickerFn);
+          activeStrength = 0;
+          activeTarget = null;
+          targetCornerPositions = null;
+
+          corners.forEach((corner, i) => {
+            gsap.killTweensOf(corner, 'x,y');
+          });
+          const defaults = [
+            { x: -cornerSize * 1.5, y: -cornerSize * 1.5 },
+            { x: cornerSize * 0.5, y: -cornerSize * 1.5 },
+            { x: cornerSize * 0.5, y: cornerSize * 0.5 },
+            { x: -cornerSize * 1.5, y: cornerSize * 0.5 }
+          ];
+          const tl = gsap.timeline();
+          corners.forEach((corner, i) => {
+            tl.to(corner, {
+              x: defaults[i].x, y: defaults[i].y,
+              duration: 0.3, ease: 'power3.out'
+            }, 0);
+          });
+
+          resumeTimeout = setTimeout(() => {
+            if (!activeTarget) {
+              const currentRotation = gsap.getProperty(cursor, 'rotation');
+              const normalizedRotation = currentRotation % 360;
+              spinTl.kill();
+              spinTl = gsap.timeline({ repeat: -1 })
+                .to(cursor, { rotation: '+=360', duration: spinDuration, ease: 'none' });
+              gsap.to(cursor, {
+                rotation: normalizedRotation + 360,
+                duration: spinDuration * (1 - normalizedRotation / 360),
+                ease: 'none',
+                onComplete: () => { spinTl?.restart(); }
+              });
+            }
+          }, 50);
+
+          target.removeEventListener('mouseleave', currentLeaveHandler);
+          currentLeaveHandler = null;
+        };
+
+        target.addEventListener('mouseleave', currentLeaveHandler, { once: true });
+      });
+
+      window.addEventListener('resize', () => {
+        containingBlock = getContainingBlock(cursor);
+      });
+    })();
+
+    /* 初始化 */
+    updateNav();
+  </script>
+
+
+</body>
+</html>

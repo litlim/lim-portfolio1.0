@@ -1,0 +1,587 @@
+{
+  "AI材质迁移": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 1822,
+      "h": 1060,
+      "orient": "wide"
+    }
+  ],
+  "AI角色设计": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 928,
+      "h": 1232,
+      "orient": "tall"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 1792,
+      "h": 2400,
+      "orient": "tall"
+    },
+    {
+      "name": "3.webp",
+      "type": "image",
+      "w": 2160,
+      "h": 2880,
+      "orient": "tall"
+    },
+    {
+      "name": "4.webp",
+      "type": "image",
+      "w": 928,
+      "h": 1232,
+      "orient": "tall"
+    },
+    {
+      "name": "5.webp",
+      "type": "image",
+      "w": 1792,
+      "h": 2400,
+      "orient": "tall"
+    },
+    {
+      "name": "6.webp",
+      "type": "image",
+      "w": 1792,
+      "h": 2400,
+      "orient": "tall"
+    },
+    {
+      "name": "7.webp",
+      "type": "image",
+      "w": 928,
+      "h": 1232,
+      "orient": "tall"
+    },
+    {
+      "name": "8.webp",
+      "type": "image",
+      "w": 1792,
+      "h": 2400,
+      "orient": "tall"
+    },
+    {
+      "name": "9.webp",
+      "type": "image",
+      "w": 928,
+      "h": 1232,
+      "orient": "tall"
+    },
+    {
+      "name": "10.webp",
+      "type": "image",
+      "w": 928,
+      "h": 1232,
+      "orient": "tall"
+    },
+    {
+      "name": "11.webp",
+      "type": "image",
+      "w": 928,
+      "h": 1232,
+      "orient": "tall"
+    },
+    {
+      "name": "12.webp",
+      "type": "image",
+      "w": 928,
+      "h": 1232,
+      "orient": "tall"
+    }
+  ],
+  "交行-数字生活节活动": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 5504,
+      "h": 3072,
+      "orient": "wide"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 3072,
+      "h": 5504,
+      "orient": "tall"
+    }
+  ],
+  "交行-盲盒活动": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 1125,
+      "h": 2970,
+      "orient": "tall"
+    }
+  ],
+  "交行品牌-碳星荣耀": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 1125,
+      "h": 1196,
+      "orient": "square"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 1125,
+      "h": 1223,
+      "orient": "square"
+    },
+    {
+      "name": "3.webp",
+      "type": "image",
+      "w": 1125,
+      "h": 1361,
+      "orient": "tall"
+    },
+    {
+      "name": "4.webp",
+      "type": "image",
+      "w": 1125,
+      "h": 1127,
+      "orient": "square"
+    },
+    {
+      "name": "5.webp",
+      "type": "image",
+      "w": 1125,
+      "h": 1179,
+      "orient": "square"
+    },
+    {
+      "name": "6.webp",
+      "type": "image",
+      "w": 1125,
+      "h": 1348,
+      "orient": "tall"
+    },
+    {
+      "name": "7.webp",
+      "type": "image",
+      "w": 330,
+      "h": 330,
+      "orient": "square"
+    },
+    {
+      "name": "8.webp",
+      "type": "image",
+      "w": 504,
+      "h": 720,
+      "orient": "tall"
+    },
+    {
+      "name": "9.webp",
+      "type": "image",
+      "w": 504,
+      "h": 720,
+      "orient": "tall"
+    },
+    {
+      "name": "10.webp",
+      "type": "image",
+      "w": 504,
+      "h": 720,
+      "orient": "tall"
+    },
+    {
+      "name": "11.webp",
+      "type": "image",
+      "w": 504,
+      "h": 720,
+      "orient": "tall"
+    },
+    {
+      "name": "12.webp",
+      "type": "image",
+      "w": 330,
+      "h": 330,
+      "orient": "square"
+    },
+    {
+      "name": "13.webp",
+      "type": "image",
+      "w": 330,
+      "h": 330,
+      "orient": "square"
+    },
+    {
+      "name": "14.webp",
+      "type": "image",
+      "w": 330,
+      "h": 330,
+      "orient": "square"
+    }
+  ],
+  "动态和视频": [
+    {
+      "name": "1.mp4",
+      "type": "video"
+    },
+    {
+      "name": "2.mp4",
+      "type": "video"
+    },
+    {
+      "name": "3.mp4",
+      "type": "video"
+    },
+    {
+      "name": "4.mp4",
+      "type": "video"
+    },
+    {
+      "name": "5.mp4",
+      "type": "video"
+    },
+    {
+      "name": "6.mp4",
+      "type": "video"
+    }
+  ],
+  "品牌练习": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 1820,
+      "h": 1783,
+      "orient": "square"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 1720,
+      "h": 783,
+      "orient": "wide"
+    },
+    {
+      "name": "3.webp",
+      "type": "image",
+      "w": 902,
+      "h": 1145,
+      "orient": "tall"
+    },
+    {
+      "name": "4.webp",
+      "type": "image",
+      "w": 795,
+      "h": 460,
+      "orient": "wide"
+    },
+    {
+      "name": "5.webp",
+      "type": "image",
+      "w": 795,
+      "h": 417,
+      "orient": "wide"
+    },
+    {
+      "name": "6.webp",
+      "type": "image",
+      "w": 795,
+      "h": 801,
+      "orient": "square"
+    },
+    {
+      "name": "7.webp",
+      "type": "image",
+      "w": 898,
+      "h": 576,
+      "orient": "wide"
+    },
+    {
+      "name": "8.webp",
+      "type": "image",
+      "w": 876,
+      "h": 782,
+      "orient": "tall"
+    },
+    {
+      "name": "9.webp",
+      "type": "image",
+      "w": 805,
+      "h": 782,
+      "orient": "square"
+    },
+    {
+      "name": "10.webp",
+      "type": "image",
+      "w": 1720,
+      "h": 854,
+      "orient": "wide"
+    },
+    {
+      "name": "11.webp",
+      "type": "image",
+      "w": 1038,
+      "h": 1006,
+      "orient": "square"
+    },
+    {
+      "name": "12.webp",
+      "type": "image",
+      "w": 806,
+      "h": 1006,
+      "orient": "tall"
+    },
+    {
+      "name": "13.webp",
+      "type": "image",
+      "w": 1720,
+      "h": 1492,
+      "orient": "tall"
+    },
+    {
+      "name": "14.webp",
+      "type": "image",
+      "w": 1720,
+      "h": 957,
+      "orient": "wide"
+    },
+    {
+      "name": "15.webp",
+      "type": "image",
+      "w": 1720,
+      "h": 939,
+      "orient": "wide"
+    },
+    {
+      "name": "16.webp",
+      "type": "image",
+      "w": 839,
+      "h": 1006,
+      "orient": "tall"
+    },
+    {
+      "name": "17.webp",
+      "type": "image",
+      "w": 857,
+      "h": 1006,
+      "orient": "tall"
+    },
+    {
+      "name": "18.webp",
+      "type": "image",
+      "w": 1035,
+      "h": 1006,
+      "orient": "square"
+    },
+    {
+      "name": "19.webp",
+      "type": "image",
+      "w": 765,
+      "h": 1001,
+      "orient": "tall"
+    }
+  ],
+  "建模练习": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 1400,
+      "h": 1600,
+      "orient": "tall"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 1400,
+      "h": 1600,
+      "orient": "tall"
+    },
+    {
+      "name": "3.webp",
+      "type": "image",
+      "w": 1400,
+      "h": 1600,
+      "orient": "tall"
+    },
+    {
+      "name": "4.webp",
+      "type": "image",
+      "w": 1800,
+      "h": 2400,
+      "orient": "tall"
+    },
+    {
+      "name": "5.webp",
+      "type": "image",
+      "w": 1800,
+      "h": 2400,
+      "orient": "tall"
+    },
+    {
+      "name": "6.webp",
+      "type": "image",
+      "w": 1800,
+      "h": 2400,
+      "orient": "tall"
+    },
+    {
+      "name": "7.webp",
+      "type": "image",
+      "w": 1000,
+      "h": 1400,
+      "orient": "tall"
+    },
+    {
+      "name": "8.webp",
+      "type": "image",
+      "w": 1920,
+      "h": 1080,
+      "orient": "wide"
+    },
+    {
+      "name": "9.webp",
+      "type": "image",
+      "w": 1920,
+      "h": 1080,
+      "orient": "wide"
+    },
+    {
+      "name": "10.webp",
+      "type": "image",
+      "w": 1920,
+      "h": 1080,
+      "orient": "wide"
+    }
+  ],
+  "手绘练习": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 638,
+      "h": 507,
+      "orient": "tall"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 621,
+      "h": 623,
+      "orient": "square"
+    },
+    {
+      "name": "3.webp",
+      "type": "image",
+      "w": 527,
+      "h": 625,
+      "orient": "tall"
+    },
+    {
+      "name": "4.webp",
+      "type": "image",
+      "w": 1736,
+      "h": 1688,
+      "orient": "square"
+    }
+  ],
+  "线下广告": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 1366,
+      "h": 768,
+      "orient": "wide"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 1366,
+      "h": 768,
+      "orient": "wide"
+    },
+    {
+      "name": "3.webp",
+      "type": "image",
+      "w": 1366,
+      "h": 768,
+      "orient": "wide"
+    },
+    {
+      "name": "4.webp",
+      "type": "image",
+      "w": 1366,
+      "h": 768,
+      "orient": "wide"
+    },
+    {
+      "name": "5.webp",
+      "type": "image",
+      "w": 2751,
+      "h": 1536,
+      "orient": "wide"
+    }
+  ],
+  "角色-封面练习": [
+    {
+      "name": "1.webp",
+      "type": "image",
+      "w": 1080,
+      "h": 1440,
+      "orient": "tall"
+    },
+    {
+      "name": "2.webp",
+      "type": "image",
+      "w": 1080,
+      "h": 1440,
+      "orient": "tall"
+    },
+    {
+      "name": "3.webp",
+      "type": "image",
+      "w": 1080,
+      "h": 1440,
+      "orient": "tall"
+    },
+    {
+      "name": "4.webp",
+      "type": "image",
+      "w": 1080,
+      "h": 1440,
+      "orient": "tall"
+    },
+    {
+      "name": "5.webp",
+      "type": "image",
+      "w": 1080,
+      "h": 1440,
+      "orient": "tall"
+    },
+    {
+      "name": "6.webp",
+      "type": "image",
+      "w": 1080,
+      "h": 1440,
+      "orient": "tall"
+    },
+    {
+      "name": "7.webp",
+      "type": "image",
+      "w": 1080,
+      "h": 1440,
+      "orient": "tall"
+    },
+    {
+      "name": "8.webp",
+      "type": "image",
+      "w": 896,
+      "h": 1200,
+      "orient": "tall"
+    },
+    {
+      "name": "9.webp",
+      "type": "image",
+      "w": 8192,
+      "h": 3738,
+      "orient": "wide"
+    }
+  ]
+}
